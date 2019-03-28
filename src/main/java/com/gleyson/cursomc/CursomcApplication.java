@@ -9,10 +9,15 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import com.gleyson.cursomc.dominio.Categoria;
 import com.gleyson.cursomc.dominio.Cidade;
+import com.gleyson.cursomc.dominio.Cliente;
+import com.gleyson.cursomc.dominio.Endereco;
 import com.gleyson.cursomc.dominio.Estado;
 import com.gleyson.cursomc.dominio.Produto;
+import com.gleyson.cursomc.dominio.enums.TipoCliente;
 import com.gleyson.cursomc.repository.CategoriaRepositorio;
 import com.gleyson.cursomc.repository.CidadeRepositorio;
+import com.gleyson.cursomc.repository.ClienteRepositorio;
+import com.gleyson.cursomc.repository.EnderecoRepositorio;
 import com.gleyson.cursomc.repository.EstadoRepositorio;
 import com.gleyson.cursomc.repository.ProdutoRepositorio;
 
@@ -30,6 +35,12 @@ public class CursomcApplication implements CommandLineRunner{
 	
 	@Autowired
 	private EstadoRepositorio uf;
+	
+	@Autowired
+	private ClienteRepositorio cliente;
+	
+	@Autowired
+	private EnderecoRepositorio endereco;
 	
 	public static void main(String[] args) {
 		SpringApplication.run(CursomcApplication.class, args);
@@ -67,6 +78,17 @@ public class CursomcApplication implements CommandLineRunner{
 		
 		uf.save(Arrays.asList(estado1, estado2));
 		city.save(Arrays.asList(cidade1, cidade2, cidade3));
+		
+		Cliente cli1 = new Cliente(null,"Gleyson Costa" , "gleysonanalista@gmail.com","04784225633", TipoCliente.PESSOAFISICA);
+		cli1.getTelefones().addAll(Arrays.asList("98020-8873","4545-3333"));
+		
+		Endereco end1 = new Endereco(null, "Av das Americas", "25", "perto da Fabrica Joselito", "Keneddy", "32145-000", cli1, cidade1);
+		Endereco end2 = new Endereco(null, "Rua Agua de Colonia", "177", "perto do Posto de Saude", "Toboão da Serra", "31995-230", cli1, cidade2);
+		
+		cli1.getEnderecoCliente().addAll(Arrays.asList(end1, end2));
+		
+		cliente.save(Arrays.asList(cli1));
+		endereco.save(Arrays.asList(end1, end2));
 	}
 }
 

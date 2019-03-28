@@ -6,12 +6,17 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.persistence.CollectionTable;
+import javax.persistence.ElementCollection;
+import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 
 import com.gleyson.cursomc.dominio.enums.TipoCliente;
 
+@Entity
 public class Cliente implements Serializable{
 	
 	/**
@@ -27,9 +32,12 @@ public class Cliente implements Serializable{
 	private String cpfOuCnpj;
 	private Integer tipo;
 	
+	@OneToMany(mappedBy="cliente")
 	private List<Endereco> enderecoCliente = new ArrayList<>();
 	
-	private Set<Cliente> telefones = new HashSet<>();
+	@ElementCollection
+	@CollectionTable(name="TELEFONE")
+	private Set<String> telefones = new HashSet<>();
 	
 	public Cliente() {
 		
@@ -74,10 +82,10 @@ public class Cliente implements Serializable{
 	public void setEnderecoCliente(List<Endereco> enderecoCliente) {
 		this.enderecoCliente = enderecoCliente;
 	}
-	public Set<Cliente> getTelefones() {
+	public Set<String> getTelefones() {
 		return telefones;
 	}
-	public void setTelefones(Set<Cliente> telefones) {
+	public void setTelefones(Set<String> telefones) {
 		this.telefones = telefones;
 	}
 
