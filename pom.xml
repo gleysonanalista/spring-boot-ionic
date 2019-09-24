@@ -9,7 +9,7 @@
 		<version>1.5.19.RELEASE</version>
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.gleyson.cursomc</groupId>
+	<groupId>com.gleys.cursomc</groupId>
 	<artifactId>cursomc</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>cursomc</name>
