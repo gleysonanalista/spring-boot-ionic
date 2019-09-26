@@ -11,7 +11,6 @@ import javax.persistence.Table;
 import com.gleyson.cursomc.dominio.enums.EstadoPagamento;
 
 @Entity
-@Table
 public class PagamentoCartao extends Pagamento{
 	
 	private static final long serialVersionUID = 1L;

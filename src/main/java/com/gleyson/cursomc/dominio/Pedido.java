@@ -9,9 +9,11 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.MapsId;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+
+import org.springframework.transaction.annotation.Transactional;
 
 @Entity
 @Table
@@ -31,18 +33,23 @@ public class Pedido implements Serializable{
 	
 	
 	private Date instante;
+	
+	@ManyToOne
+	@JoinColumn(name="cliente_id")
 	private Cliente cliente;
+	
+	@ManyToOne
+	@JoinColumn(name="endereco_entrega_id")
 	private Endereco enderecoEntrega;
 	
 	public Pedido() {
 		
 	}
 	
-	public Pedido(Integer id, Date instante, Pagamento pagamento, Cliente cliente, Endereco enderecoEntrega) {
+	public Pedido(Integer id, Date instante, Cliente cliente, Endereco enderecoEntrega) {
 		super();
 		this.id = id;
 		this.instante = instante;
-		this.pagamento = pagamento;
 		this.cliente = cliente;
 		this.enderecoEntrega = enderecoEntrega;
 	}

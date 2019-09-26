@@ -6,6 +6,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.MapsId;
 import javax.persistence.OneToOne;
@@ -14,8 +16,8 @@ import javax.persistence.Table;
 import com.gleyson.cursomc.dominio.enums.EstadoPagamento;
 
 @Entity
-@Table
-public class Pagamento implements Serializable{
+@Inheritance(strategy=InheritanceType.JOINED)
+public abstract class Pagamento implements Serializable{
 	
 	/**
 	 * 
@@ -26,7 +28,7 @@ public class Pagamento implements Serializable{
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 	
-	private EstadoPagamento estado;
+	private Integer estado;
 	
 	@OneToOne
 	@JoinColumn(name="pedido_id")
@@ -40,7 +42,7 @@ public class Pagamento implements Serializable{
 	public Pagamento(Integer id, EstadoPagamento estado, Pedido pedido) {
 		super();
 		this.id = id;
-		this.estado = estado;
+		this.estado = estado.getCodigo();
 		this.pedido = pedido;
 	}
 
@@ -53,11 +55,11 @@ public class Pagamento implements Serializable{
 	}
 
 	public EstadoPagamento getEstado() {
-		return estado;
+		return EstadoPagamento.toEnum(estado);
 	}
 
 	public void setEstado(EstadoPagamento estado) {
-		this.estado = estado;
+		this.estado = estado.getCodigo();
 	}
 
 	public Pedido getPedido() {

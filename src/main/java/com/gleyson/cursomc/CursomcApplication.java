@@ -1,5 +1,6 @@
 package com.gleyson.cursomc;
 
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,13 +13,20 @@ import com.gleyson.cursomc.dominio.Cidade;
 import com.gleyson.cursomc.dominio.Cliente;
 import com.gleyson.cursomc.dominio.Endereco;
 import com.gleyson.cursomc.dominio.Estado;
+import com.gleyson.cursomc.dominio.Pagamento;
+import com.gleyson.cursomc.dominio.PagamentoBoleto;
+import com.gleyson.cursomc.dominio.PagamentoCartao;
+import com.gleyson.cursomc.dominio.Pedido;
 import com.gleyson.cursomc.dominio.Produto;
+import com.gleyson.cursomc.dominio.enums.EstadoPagamento;
 import com.gleyson.cursomc.dominio.enums.TipoCliente;
 import com.gleyson.cursomc.repository.CategoriaRepositorio;
 import com.gleyson.cursomc.repository.CidadeRepositorio;
 import com.gleyson.cursomc.repository.ClienteRepositorio;
 import com.gleyson.cursomc.repository.EnderecoRepositorio;
 import com.gleyson.cursomc.repository.EstadoRepositorio;
+import com.gleyson.cursomc.repository.PagamentoRepositorio;
+import com.gleyson.cursomc.repository.PedidoRepositorio;
 import com.gleyson.cursomc.repository.ProdutoRepositorio;
 
 @SpringBootApplication
@@ -41,6 +49,12 @@ public class CursomcApplication implements CommandLineRunner{
 	
 	@Autowired
 	private EnderecoRepositorio endereco;
+	
+	@Autowired
+	private PedidoRepositorio pedido;
+	
+	@Autowired
+	private PagamentoRepositorio pagamento;
 	
 	public static void main(String[] args) {
 		SpringApplication.run(CursomcApplication.class, args);
@@ -89,6 +103,20 @@ public class CursomcApplication implements CommandLineRunner{
 		
 		cliente.save(Arrays.asList(cli1));
 		endereco.save(Arrays.asList(end1, end2));
+		
+		SimpleDateFormat data = new SimpleDateFormat("dd/MM/yyy hh:mm");
+		
+		Pedido pedido1 = new Pedido(null,data.parse("20/08/2019 10:32"), cli1, end1);
+		Pedido pedido2 = new Pedido(null,data.parse("25/08/2019 11:32"), cli1, end2);
+		
+		Pagamento pgto1 = new PagamentoCartao(null, EstadoPagamento.QUITADO, pedido1, 5);
+		pedido1.setPagamento(pgto1);
+		
+		Pagamento pgto2 = new PagamentoBoleto(null, EstadoPagamento.PEDENTE, pedido2, data.parse("31/09/2019 11:32"), null);
+		pedido2.setPagamento(pgto2);
+		
+		pedido.save(Arrays.asList(pedido1,pedido2));
+		pagamento.save(Arrays.asList(pgto1,pgto2));
 	}
 }
 

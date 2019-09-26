@@ -11,7 +11,6 @@ import javax.persistence.Table;
 import com.gleyson.cursomc.dominio.enums.EstadoPagamento;
 
 @Entity
-@Table
 public class PagamentoBoleto extends Pagamento{
 	
 	private static final long serialVersionUID = 1L;
@@ -22,6 +21,10 @@ public class PagamentoBoleto extends Pagamento{
 	
 	private Date dataVencimento;
 	private Date dataPagamento;
+	
+	public PagamentoBoleto() {
+		
+	}
 	
 	public PagamentoBoleto(Integer id, EstadoPagamento estado, Pedido pedido, Date dataVencimento, Date dataPagamento) {
 		super(id, estado, pedido);
