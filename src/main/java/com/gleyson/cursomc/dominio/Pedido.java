@@ -2,6 +2,9 @@ package com.gleyson.cursomc.dominio;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -12,8 +15,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-
-import org.springframework.transaction.annotation.Transactional;
 
 @Entity
 @Table
@@ -31,7 +32,6 @@ public class Pedido implements Serializable{
 	@OneToOne(cascade=CascadeType.ALL, mappedBy="pedido")
 	private Pagamento pagamento;
 	
-	
 	private Date instante;
 	
 	@ManyToOne
@@ -41,6 +41,8 @@ public class Pedido implements Serializable{
 	@ManyToOne
 	@JoinColumn(name="endereco_entrega_id")
 	private Endereco enderecoEntrega;
+	
+	private Set<ItemPedido> itens = new HashSet<>();
 	
 	public Pedido() {
 		
@@ -93,6 +95,14 @@ public class Pedido implements Serializable{
 	public void setEnderecoEntrega(Endereco enderecoEntrega) {
 		this.enderecoEntrega = enderecoEntrega;
 	}
+	
+	public Set<ItemPedido> getItens() {
+		return itens;
+	}
+
+	public void setItens(Set<ItemPedido> itens) {
+		this.itens = itens;
+	}
 
 	@Override
 	public int hashCode() {
@@ -118,6 +128,5 @@ public class Pedido implements Serializable{
 			return false;
 		return true;
 	}
-	
-	
+
 }
