@@ -13,6 +13,7 @@ import com.gleyson.cursomc.dominio.Cidade;
 import com.gleyson.cursomc.dominio.Cliente;
 import com.gleyson.cursomc.dominio.Endereco;
 import com.gleyson.cursomc.dominio.Estado;
+import com.gleyson.cursomc.dominio.ItemPedido;
 import com.gleyson.cursomc.dominio.Pagamento;
 import com.gleyson.cursomc.dominio.PagamentoBoleto;
 import com.gleyson.cursomc.dominio.PagamentoCartao;
@@ -25,6 +26,7 @@ import com.gleyson.cursomc.repository.CidadeRepositorio;
 import com.gleyson.cursomc.repository.ClienteRepositorio;
 import com.gleyson.cursomc.repository.EnderecoRepositorio;
 import com.gleyson.cursomc.repository.EstadoRepositorio;
+import com.gleyson.cursomc.repository.ItemPedidoRepositorio;
 import com.gleyson.cursomc.repository.PagamentoRepositorio;
 import com.gleyson.cursomc.repository.PedidoRepositorio;
 import com.gleyson.cursomc.repository.ProdutoRepositorio;
@@ -55,6 +57,10 @@ public class CursomcApplication implements CommandLineRunner{
 	
 	@Autowired
 	private PagamentoRepositorio pagamento;
+	
+	@Autowired
+	private ItemPedidoRepositorio itemPedido;
+	
 	
 	public static void main(String[] args) {
 		SpringApplication.run(CursomcApplication.class, args);
@@ -108,6 +114,7 @@ public class CursomcApplication implements CommandLineRunner{
 		
 		Pedido pedido1 = new Pedido(null,data.parse("20/08/2019 10:32"), cli1, end1);
 		Pedido pedido2 = new Pedido(null,data.parse("25/08/2019 11:32"), cli1, end2);
+		Pedido pedido3 = new Pedido(null,data.parse("27/07/2019 11:32"), cli1, end2);
 		
 		Pagamento pgto1 = new PagamentoCartao(null, EstadoPagamento.QUITADO, pedido1, 5);
 		pedido1.setPagamento(pgto1);
@@ -117,6 +124,16 @@ public class CursomcApplication implements CommandLineRunner{
 		
 		pedido.save(Arrays.asList(pedido1,pedido2));
 		pagamento.save(Arrays.asList(pgto1,pgto2));
+		
+		ItemPedido itemP1 = new ItemPedido(pedido1, p1, 10.00, 4, 250.00);
+		ItemPedido itemP2 = new ItemPedido(pedido1, p3, 15.00, 2, 400.00);
+		ItemPedido itemP3 = new ItemPedido(pedido2, p2, 11.00, 3, 200.00);
+		
+		pedido1.getItens().addAll(Arrays.asList(itemP1, itemP2));
+		pedido2.getItens().addAll(Arrays.asList(itemP3));
+		pedido3.getItens().addAll(Arrays.asList(itemP2));
+		
+		itemPedido.save(Arrays.asList(itemP1,itemP2,itemP3));
 	}
 }
 

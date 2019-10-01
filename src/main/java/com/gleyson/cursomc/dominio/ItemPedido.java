@@ -2,6 +2,12 @@ package com.gleyson.cursomc.dominio;
 
 import java.io.Serializable;
 
+import javax.persistence.Embedded;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+
+
+@Entity
 public class ItemPedido implements Serializable{
 	
 	/**
@@ -12,6 +18,8 @@ public class ItemPedido implements Serializable{
 	private Integer quantidade;
 	private Double preco;
 	
+	@Embedded
+	@Id
 	private ItemPedidoPK id = new ItemPedidoPK();
 	
 	public Double getDesconto() {
