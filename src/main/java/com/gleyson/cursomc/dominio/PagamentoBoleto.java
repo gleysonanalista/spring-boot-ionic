@@ -8,6 +8,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.gleyson.cursomc.dominio.enums.EstadoPagamento;
 
 @Entity
@@ -19,7 +20,10 @@ public class PagamentoBoleto extends Pagamento{
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 	
+	@JsonFormat(pattern="dd/mm/yyyy")
 	private Date dataVencimento;
+	
+	@JsonFormat(pattern="dd/mm/yyyy")
 	private Date dataPagamento;
 	
 	public PagamentoBoleto() {
