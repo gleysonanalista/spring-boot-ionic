@@ -33,14 +33,13 @@ public class Pedido implements Serializable{
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 	
-	@JsonManagedReference
+	
 	@OneToOne(cascade=CascadeType.ALL, mappedBy="pedido")
 	private Pagamento pagamento;
 	
 	@JsonFormat(pattern="dd/mm/yyyy")
 	private Date instante;
 	
-	@JsonManagedReference
 	@ManyToOne
 	@JoinColumn(name="cliente_id")
 	private Cliente cliente;
