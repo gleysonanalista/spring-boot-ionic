@@ -9,9 +9,16 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
+import com.gleyson.cursomc.dominio.Categoria;
+import com.gleyson.cursomc.dominio.Cidade;
 import com.gleyson.cursomc.dominio.Cliente;
+import com.gleyson.cursomc.dominio.Endereco;
+import com.gleyson.cursomc.dominio.enums.TipoCliente;
 import com.gleyson.cursomc.dto.ClienteDTO;
+import com.gleyson.cursomc.dto.ClienteNewDTO;
+import com.gleyson.cursomc.repository.CidadeRepositorio;
 import com.gleyson.cursomc.repository.ClienteRepositorio;
+import com.gleyson.cursomc.repository.EnderecoRepositorio;
 import com.gleyson.cursomc.services.excecap.DataIntegrityException;
 import com.gleyson.cursomc.services.excecap.MessagensExcecao;
 
@@ -20,6 +27,12 @@ public class ClienteService {
 	
 	@Autowired
 	private ClienteRepositorio repositorio;
+	
+	@Autowired
+	private CidadeRepositorio cidadeRepositorio;
+	
+	@Autowired
+	private EnderecoRepositorio endereco;
 	
 	public Cliente buscar(Integer id) {
 		
@@ -33,7 +46,9 @@ public class ClienteService {
 	
 	public Cliente insert(Cliente obj) {
 		obj.setId(null);
-		return repositorio.save(obj);
+		obj = repositorio.save(obj);
+		endereco.save(obj.getEnderecoCliente());
+		return obj;
 	}
 	
 	public Cliente update(Cliente obj) {
@@ -72,6 +87,25 @@ public class ClienteService {
 		novoObjeto.setNome(obj.getNome());
 		novoObjeto.setEmail(obj.getEmail());
 	}
+	
+	public Cliente fromDTO(ClienteNewDTO objeto) {
 
+		Cidade cidade = cidadeRepositorio.findOne(objeto.getCidadeId());
+		Cliente cliente = new Cliente(null, objeto.getNome(), objeto.getEmail(), objeto.getCpfOuCnpj(),
+				TipoCliente.toEnum(objeto.getTipo()));
+		Endereco end = new Endereco(null, objeto.getLogradouro(), objeto.getNumero(), objeto.getComplemento(),
+				objeto.getBairro(), objeto.getCep(), cliente, cidade);
+		cliente.getEnderecoCliente().add(end);
+		cliente.getTelefones().add(objeto.getTelefone1());
+
+		if (objeto.getTelefone2()!=null) {
+			cliente.getTelefones().add(objeto.getTelefone2());
+		}
+
+		if (objeto.getTelefone3()!=null) {
+			cliente.getTelefones().add(objeto.getTelefone3());
+		}
+		return cliente;
+	}
 
 }

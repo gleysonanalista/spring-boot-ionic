@@ -10,8 +10,14 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
 import com.gleyson.cursomc.dominio.Categoria;
+import com.gleyson.cursomc.dominio.Cidade;
+import com.gleyson.cursomc.dominio.Cliente;
+import com.gleyson.cursomc.dominio.Endereco;
+import com.gleyson.cursomc.dominio.enums.TipoCliente;
 import com.gleyson.cursomc.dto.CategoriaDTO;
+import com.gleyson.cursomc.dto.ClienteNewDTO;
 import com.gleyson.cursomc.repository.CategoriaRepositorio;
+import com.gleyson.cursomc.repository.CidadeRepositorio;
 import com.gleyson.cursomc.services.excecap.DataIntegrityException;
 import com.gleyson.cursomc.services.excecap.MessagensExcecao;
 
@@ -72,4 +78,5 @@ public class CategoriaService {
 	private void updateData(Categoria novoObjeto, Categoria obj) {
 		novoObjeto.setNome(obj.getNome());
 	}
+	
 }

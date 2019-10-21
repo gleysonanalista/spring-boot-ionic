@@ -1,5 +1,6 @@
 package com.gleyson.cursomc.resources;
 
+import java.net.URI;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -14,9 +15,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.gleyson.cursomc.dominio.Cliente;
 import com.gleyson.cursomc.dto.ClienteDTO;
+import com.gleyson.cursomc.dto.ClienteNewDTO;
 import com.gleyson.cursomc.services.ClienteService;
 
 @RestController
@@ -79,6 +82,14 @@ public class ClienteResource {
 		Page<ClienteDTO> listaDTO = lista.map( obj-> new ClienteDTO(obj));
 		return ResponseEntity.ok().body(listaDTO);
 
+	}
+	
+	@RequestMapping(method=RequestMethod.POST)
+	public ResponseEntity<Void> insert(@Valid @RequestBody ClienteNewDTO objDto){
+		Cliente obj = servico.fromDTO(objDto);
+		obj = servico.insert(obj);
+		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(obj.getId()).toUri();
+		return ResponseEntity.created(uri).build();
 	}
 }
 
