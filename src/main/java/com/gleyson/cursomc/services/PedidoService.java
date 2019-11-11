@@ -1,12 +1,18 @@
 package com.gleyson.cursomc.services;
 
+import java.util.Date;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.gleyson.cursomc.dominio.Categoria;
+import com.gleyson.cursomc.dominio.ItemPedido;
+import com.gleyson.cursomc.dominio.PagamentoBoleto;
 import com.gleyson.cursomc.dominio.Pedido;
-import com.gleyson.cursomc.repository.CategoriaRepositorio;
+import com.gleyson.cursomc.dominio.enums.EstadoPagamento;
+import com.gleyson.cursomc.repository.ItemPedidoRepositorio;
+import com.gleyson.cursomc.repository.PagamentoRepositorio;
 import com.gleyson.cursomc.repository.PedidoRepositorio;
+import com.gleyson.cursomc.repository.ProdutoRepositorio;
 import com.gleyson.cursomc.services.excecap.MessagensExcecao;
 
 @Service
@@ -14,6 +20,21 @@ public class PedidoService {
 	
 	@Autowired
 	private PedidoRepositorio repositorio;
+	
+	@Autowired
+	private BoletoService boletoService;
+	
+	@Autowired
+	private PagamentoRepositorio pgRepositorio;
+	
+	@Autowired
+	private ProdutoRepositorio prodRepositorio;
+	
+	
+	@Autowired
+	private ItemPedidoRepositorio itemRepositorio;
+	
+	
 	
 	public Pedido buscar(Integer id) {
 		
@@ -23,6 +44,30 @@ public class PedidoService {
 		}
 		
 		return dados;
+	}
+	
+	public Pedido insert(Pedido obj) {
+		
+		obj.setId(null);
+		obj.setInstante(new Date());
+		obj.getPagamento().setEstado(EstadoPagamento.PEDENTE);
+		obj.getPagamento().setPedido(obj);
+		
+		if(obj.getPagamento() instanceof PagamentoBoleto) {
+			PagamentoBoleto pgto = (PagamentoBoleto) obj.getPagamento();
+			boletoService.preencherPagamentoBoleto(pgto, obj.getInstante());
+		}
+		
+		obj = repositorio.save(obj);
+		 pgRepositorio.save(obj.getPagamento());
+		 
+		 for(ItemPedido ip: obj.getItens()) {
+			 ip.setDesconto(0.0);
+			 ip.setPreco(prodRepositorio.findOne(ip.getProduto().getId()).getPreco());
+			 ip.setPedido(obj);
+		 }
+		 itemRepositorio.save(obj.getItens());
+		 return obj;
 	}
 
 }

@@ -1,16 +1,15 @@
 package com.gleyson.cursomc.dominio;
 
-import java.util.Date;
-
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.gleyson.cursomc.dominio.enums.EstadoPagamento;
 
 @Entity
+@JsonTypeName("pagamentoComCartao")
 public class PagamentoCartao extends Pagamento{
 	
 	private static final long serialVersionUID = 1L;
