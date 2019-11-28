@@ -9,6 +9,7 @@ import com.gleyson.cursomc.dominio.ItemPedido;
 import com.gleyson.cursomc.dominio.PagamentoBoleto;
 import com.gleyson.cursomc.dominio.Pedido;
 import com.gleyson.cursomc.dominio.enums.EstadoPagamento;
+import com.gleyson.cursomc.repository.ClienteRepositorio;
 import com.gleyson.cursomc.repository.ItemPedidoRepositorio;
 import com.gleyson.cursomc.repository.PagamentoRepositorio;
 import com.gleyson.cursomc.repository.PedidoRepositorio;
@@ -34,6 +35,8 @@ public class PedidoService {
 	@Autowired
 	private ItemPedidoRepositorio itemRepositorio;
 	
+	@Autowired
+	private ClienteRepositorio clienteReposit;
 	
 	
 	public Pedido buscar(Integer id) {
@@ -50,6 +53,7 @@ public class PedidoService {
 		
 		obj.setId(null);
 		obj.setInstante(new Date());
+		obj.setCliente(clienteReposit.findOne(obj.getCliente().getId()));
 		obj.getPagamento().setEstado(EstadoPagamento.PEDENTE);
 		obj.getPagamento().setPedido(obj);
 		
@@ -63,11 +67,12 @@ public class PedidoService {
 		 
 		 for(ItemPedido ip: obj.getItens()) {
 			 ip.setDesconto(0.0);
-			 ip.setPreco(prodRepositorio.findOne(ip.getProduto().getId()).getPreco());
+			 ip.setProduto(prodRepositorio.findOne(ip.getProduto().getId()));
+			 ip.setPreco(ip.getProduto().getPreco());
 			 ip.setPedido(obj);
 		 }
 		 itemRepositorio.save(obj.getItens());
+		 System.out.println(obj);
 		 return obj;
 	}
-
 }

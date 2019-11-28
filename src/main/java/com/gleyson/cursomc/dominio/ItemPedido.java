@@ -1,6 +1,8 @@
 package com.gleyson.cursomc.dominio;
 
 import java.io.Serializable;
+import java.text.NumberFormat;
+import java.util.Locale;
 
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
@@ -105,6 +107,23 @@ public class ItemPedido implements Serializable{
 	
 	public double getSubTotal() {
 		return (preco - desconto) * quantidade;
+	}
+	
+	
+	
+	@Override
+	public String toString() {
+		NumberFormat numero = NumberFormat.getCurrencyInstance(new Locale("pt", "BR"));
+		StringBuilder builder = new StringBuilder();
+		builder.append(getProduto().getNome());
+		builder.append(", Qte:");
+		builder.append(getQuantidade());
+		builder.append(", Preço Unitario: ");
+		builder.append(numero.format(getPreco()));
+		builder.append(", Subtotal:");
+		builder.append(numero.format(getSubTotal()));
+		builder.append("\n");
+		return builder.toString();
 	}
 	
 }

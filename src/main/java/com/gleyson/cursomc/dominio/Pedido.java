@@ -1,9 +1,12 @@
 package com.gleyson.cursomc.dominio;
 
 import java.io.Serializable;
+import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Locale;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -143,5 +146,26 @@ public class Pedido implements Serializable{
 		}
 		return soma;
 	}
-
+	
+	@Override
+	public String toString() {
+		NumberFormat numero = NumberFormat.getCurrencyInstance(new Locale("pt", "BR"));
+		StringBuilder builder = new StringBuilder();
+		SimpleDateFormat data = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss");
+		builder.append("Pedido numero");
+		builder.append(getId());
+		builder.append(", Instante: ");
+		builder.append(data.format(getInstante()));
+		builder.append(", Cliente: ");
+		builder.append(getCliente().getNome());
+		builder.append(", Situação do pagamento: ");
+		builder.append(getPagamento().getEstado().getDescricao());
+		builder.append("\nDetalhes:\n");
+		for(ItemPedido item: getItens()) {
+			builder.append(item.toString());
+		}
+		builder.append(" Valor total: ");
+		builder.append(numero.format(getValorTotal()));
+		return builder.toString();
+	}
 }
