@@ -36,7 +36,7 @@ public class PedidoService {
 	private ItemPedidoRepositorio itemRepositorio;
 	
 	@Autowired
-	private ClienteRepositorio clienteReposit;
+	private ClienteService clienteService;
 	
 	@Autowired
 	private EmailService emailService;
@@ -56,7 +56,7 @@ public class PedidoService {
 		
 		obj.setId(null);
 		obj.setInstante(new Date());
-		obj.setCliente(clienteReposit.findOne(obj.getCliente().getId()));
+		obj.setCliente(clienteService.buscar(obj.getCliente().getId()));
 		obj.getPagamento().setEstado(EstadoPagamento.PEDENTE);
 		obj.getPagamento().setPedido(obj);
 		
@@ -75,7 +75,7 @@ public class PedidoService {
 			 ip.setPedido(obj);
 		 }
 		 itemRepositorio.save(obj.getItens());
-		 emailService.sendOrderConfirmationEmail(obj);
+		 emailService.sendOrderConfirmationHtmlEmail(obj);
 		 return obj;
 	}
 }
