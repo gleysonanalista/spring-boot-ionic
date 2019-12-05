@@ -20,6 +20,7 @@ import com.gleyson.cursomc.dominio.PagamentoCartao;
 import com.gleyson.cursomc.dominio.Pedido;
 import com.gleyson.cursomc.dominio.Produto;
 import com.gleyson.cursomc.dominio.enums.EstadoPagamento;
+import com.gleyson.cursomc.dominio.enums.Perfil;
 import com.gleyson.cursomc.dominio.enums.TipoCliente;
 import com.gleyson.cursomc.repository.CategoriaRepositorio;
 import com.gleyson.cursomc.repository.CidadeRepositorio;
@@ -128,12 +129,17 @@ public class DBService  {
 		Cliente cli1 = new Cliente(null,"Gleyson Costa" , "gleysonanalista@gmail.com","04784225633", TipoCliente.PESSOAFISICA, bp.encode("123"));
 		cli1.getTelefones().addAll(Arrays.asList("98020-8873","4545-3333"));
 		
+		Cliente cli2 = new Cliente(null,"Bruno Costa" , "brunocosta@gmail.com","41043401032", TipoCliente.PESSOAFISICA, bp.encode("123"));
+		cli2.getTelefones().addAll(Arrays.asList("98020-8873","4545-3333"));
+		cli2.addPerfil(Perfil.ADMIN);
+		
 		Endereco end1 = new Endereco(null, "Av das Americas", "25", "perto da Fabrica Joselito", "Keneddy", "32145-000", cli1, cidade1);
 		Endereco end2 = new Endereco(null, "Rua Agua de Colonia", "177", "perto do Posto de Saude", "Toboão da Serra", "31995-230", cli1, cidade2);
 		
 		cli1.getEnderecoCliente().addAll(Arrays.asList(end1, end2));
+		cli2.getEnderecoCliente().addAll(Arrays.asList(end1));
 		
-		cliente.save(Arrays.asList(cli1));
+		cliente.save(Arrays.asList(cli1, cli2));
 		endereco.save(Arrays.asList(end1, end2));
 		
 		SimpleDateFormat data = new SimpleDateFormat("dd/MM/yyy hh:mm");
